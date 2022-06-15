@@ -28,7 +28,9 @@ const server = http.createServer((request, response) => {
 	} else {
 		// No endpoint matched
 		response.write(
-			JSON.stringify({ message: `${method} ${url} not found in this server` })
+			JSON.stringify({
+				message: `${method} ${url} not found in this server`,
+			})
 		);
 	}
 
