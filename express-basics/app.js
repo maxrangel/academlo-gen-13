@@ -43,6 +43,29 @@ app.post('/users', (req, res) => {
 	});
 });
 
+app.get('/posts', (req, res) => {
+	res.status(200).json({
+		status: 'success',
+		posts,
+	});
+});
+
+app.post('/posts', (req, res) => {
+	const { title } = req.body;
+
+	const newPost = {
+		id: Math.floor(Math.random() * 1000),
+		title,
+	};
+
+	posts.push(newPost);
+
+	res.status(201).json({
+		status: 'success',
+		newPost,
+	});
+});
+
 app.listen(4000, () => {
 	console.log('Express app running!!');
 });
