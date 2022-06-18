@@ -14,20 +14,24 @@ const getAllUsers = async (req, res) => {
 	}
 };
 
-const createUser = (req, res) => {
-	const { name } = req.body;
+const createUser = async (req, res) => {
+	try {
+		const { name, age, email, password } = req.body;
 
-	const newUser = {
-		id: Math.floor(Math.random() * 1000),
-		name,
-	};
+		const newUser = await User.create({
+			name,
+			age,
+			email,
+			password,
+		});
 
-	users.push(newUser);
-
-	res.status(201).json({
-		status: 'success',
-		newUser,
-	});
+		res.status(201).json({
+			status: 'success',
+			newUser,
+		});
+	} catch (err) {
+		console.log(err);
+	}
 };
 
 module.exports = { getAllUsers, createUser };
