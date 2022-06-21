@@ -13,8 +13,8 @@ const app = express();
 app.use(express.json());
 
 // Define endpoints
-app.use('/users', usersRouter);
-app.use('/posts', postsRouter);
+app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/posts', postsRouter);
 
 db.authenticate()
 	.then(() => console.log('Db authenticated'))
