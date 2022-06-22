@@ -4,9 +4,6 @@ const express = require('express');
 const { usersRouter } = require('./routes/users.routes');
 const { postsRouter } = require('./routes/posts.routes');
 
-// Utils
-const { db } = require('./utils/database.util');
-
 // Init express app
 const app = express();
 
@@ -16,14 +13,9 @@ app.use(express.json());
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/posts', postsRouter);
 
-db.authenticate()
-	.then(() => console.log('Db authenticated'))
-	.catch(err => console.log(err));
-
-db.sync()
-	.then(() => console.log('Db synced'))
-	.catch(err => console.log(err));
-
-app.listen(4000, () => {
-	console.log('Express app running!!');
+// Global error handler
+app.use('*', (err, req, res, next) => {
+	console.log(err);
 });
+
+module.exports = { app };

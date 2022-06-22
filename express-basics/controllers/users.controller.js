@@ -30,7 +30,10 @@ const createUser = async (req, res) => {
 			newUser,
 		});
 	} catch (err) {
-		console.log(err);
+		res.status(400).json({
+			message: 'Something went wrong',
+			err,
+		});
 	}
 };
 
@@ -52,22 +55,26 @@ const getUserById = async (req, res) => {
 	});
 };
 
-const updateUser = async (req, res) => {
-	const { id } = req.params;
-	const { name } = req.body;
+const updateUser = async (req, res, next) => {
+	try {
+		const { id } = req.params;
+		const { name } = req.body;
 
-	const user = await User.findOne({ where: { id } });
+		const user = await User.findOne({ where: { id } });
 
-	if (!user) {
-		return res.status(404).json({
-			status: 'error',
-			message: 'User not found',
-		});
+		// if (!user) {
+		// 	return res.status(404).json({
+		// 		status: 'error',
+		// 		message: 'User not found',
+		// 	});
+		// }
+
+		await user.update({ name });
+
+		res.status(204).json({ status: 'success' });
+	} catch (error) {
+		next(error);
 	}
-
-	await user.update({ name });
-
-	res.status(204).json({ status: 'success' });
 };
 
 const deleteUser = async (req, res) => {
