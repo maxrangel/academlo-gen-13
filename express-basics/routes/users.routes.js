@@ -15,14 +15,11 @@ const checkResult = (req, res, next) => {
 
 	if (!errors.isEmpty()) {
 		// Array has errors
+		const errorMsgs = errors.array().map(err => err.msg);
 
-		errors.array(); // [{ value, msg, param, location }, { value, msg, param, location }, ...]
-		// Step 1: Loop through array of errors
-		// Step 2: Get all error msg's [msg, msg, msg]
-		// Step 3: Combine (join), all strings in the array
-		// Step 4: Send the combined msg in the response
+		const message = errorMsgs.join('. ');
 
-		return res.status(400).json({ status: 'error', message: '' });
+		return res.status(400).json({ status: 'error', message });
 	}
 
 	next();
@@ -34,10 +31,14 @@ usersRouter.get('/', getAllUsers);
 
 usersRouter.post(
 	'/',
-	body('name').notEmpty(),
-	body('age').isNumeric(),
-	body('email').isEmail(),
-	body('password').isLength({ min: 8 }).isAlphanumeric(),
+	body('name').notEmpty().withMessage('Name cannot be empty'),
+	body('age').isNumeric().withMessage('Age must be a number'),
+	body('email').isEmail().withMessage('Must provide a valid email'),
+	body('password')
+		.isLength({ min: 8 })
+		.withMessage('Password must be at least 8 characters long')
+		.isAlphanumeric()
+		.withMessage('Password must contain letters and numbers'),
 	checkResult,
 	createUser
 );
