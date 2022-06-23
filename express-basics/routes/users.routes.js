@@ -22,7 +22,7 @@ usersRouter.post('/', createUserValidators, createUser);
 
 usersRouter.get('/:id', getUserById);
 
-usersRouter.patch('/:id', updateUser); // next()
+usersRouter.patch('/:id', updateUser);
 
 usersRouter.delete('/:id', deleteUser);
 

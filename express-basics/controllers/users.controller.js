@@ -1,6 +1,12 @@
 // Models
 const { User } = require('../models/user.model');
 
+const catchAsync = fn => {
+	return (req, res, next) => {
+		fn(req, res, next).catch(err => next(err));
+	};
+};
+
 const getAllUsers = async (req, res) => {
 	try {
 		const users = await User.findAll();
@@ -30,10 +36,7 @@ const createUser = async (req, res) => {
 			newUser,
 		});
 	} catch (err) {
-		res.status(400).json({
-			message: 'Something went wrong',
-			err,
-		});
+		next(err);
 	}
 };
 
@@ -55,27 +58,23 @@ const getUserById = async (req, res) => {
 	});
 };
 
-const updateUser = async (req, res, next) => {
-	try {
-		const { id } = req.params;
-		const { name } = req.body;
+const updateUser = catchAsync(async (req, res, next) => {
+	const { id } = req.params;
+	const { name } = req.body;
 
-		const user = await User.findOne({ where: { id } });
+	const user = await User.findOne({ where: { id } });
 
-		// if (!user) {
-		// 	return res.status(404).json({
-		// 		status: 'error',
-		// 		message: 'User not found',
-		// 	});
-		// }
+	// if (!user) {
+	// 	return res.status(404).json({
+	// 		status: 'error',
+	// 		message: 'User not found',
+	// 	});
+	// }
 
-		await user.update({ name });
+	await user.update({ name });
 
-		res.status(204).json({ status: 'success' });
-	} catch (error) {
-		next(error);
-	}
-};
+	res.status(204).json({ status: 'success' });
+});
 
 const deleteUser = async (req, res) => {
 	const { id } = req.params;
