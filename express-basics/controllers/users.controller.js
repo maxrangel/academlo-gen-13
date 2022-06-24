@@ -3,6 +3,7 @@ const { User } = require('../models/user.model');
 
 // Utils
 const { catchAsync } = require('../utils/catchAsync.util');
+const { AppError } = require('../utils/appError.util');
 
 const getAllUsers = catchAsync(async (req, res, next) => {
 	const users = await User.findAll();
@@ -30,16 +31,7 @@ const createUser = catchAsync(async (req, res, next) => {
 });
 
 const getUserById = catchAsync(async (req, res, next) => {
-	const { id } = req.params;
-
-	const user = await User.findOne({ where: { id } });
-
-	if (!user) {
-		return res.status(404).json({
-			status: 'error',
-			message: 'User not found',
-		});
-	}
+	const { user } = req;
 
 	res.status(200).json({
 		status: 'success',
@@ -48,17 +40,8 @@ const getUserById = catchAsync(async (req, res, next) => {
 });
 
 const updateUser = catchAsync(async (req, res, next) => {
-	const { id } = req.params;
+	const { user } = req;
 	const { name } = req.body;
-
-	const user = await User.findOne({ where: { id } });
-
-	if (!user) {
-		return res.status(404).json({
-			status: 'error',
-			message: 'User not found',
-		});
-	}
 
 	await user.update({ name });
 
@@ -66,16 +49,7 @@ const updateUser = catchAsync(async (req, res, next) => {
 });
 
 const deleteUser = catchAsync(async (req, res, next) => {
-	const { id } = req.params;
-
-	const user = await User.findOne({ where: { id } });
-
-	if (!user) {
-		return res.status(404).json({
-			status: 'error',
-			message: 'User not found',
-		});
-	}
+	const { user } = req;
 
 	// await user.destroy();
 	await user.update({ status: 'deleted' });
