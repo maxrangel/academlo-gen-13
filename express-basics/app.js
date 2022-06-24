@@ -4,6 +4,12 @@ const express = require('express');
 const { usersRouter } = require('./routes/users.routes');
 const { postsRouter } = require('./routes/posts.routes');
 
+// Global err controller
+const { globalErrorHandler } = require('./controllers/error.controller');
+
+// Utils
+const { AppError } = require('./utils/appError.util');
+
 // Init express app
 const app = express();
 
@@ -13,16 +19,16 @@ app.use(express.json());
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/posts', postsRouter);
 
-// Global error handler
-app.use('*', (err, req, res, next) => {
-	const statusCode = err.statusCode || 500;
-
-	res.status(statusCode).json({
-		status: 'fail',
-		message: err.message,
-		error: err,
-		stack: err.stack,
-	});
+// Handle incoming unknown routes to the server
+app.all('*', (req, res, next) => {
+	next(
+		new AppError(
+			`${req.method} ${req.originalUrl} not found in this server`,
+			404
+		)
+	);
 });
+
+app.use(globalErrorHandler);
 
 module.exports = { app };
