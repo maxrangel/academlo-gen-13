@@ -1,12 +1,15 @@
 // Models
 const { User } = require('../models/user.model');
+const { Post } = require('../models/post.model');
 
 // Utils
 const { catchAsync } = require('../utils/catchAsync.util');
 const { AppError } = require('../utils/appError.util');
 
 const getAllUsers = catchAsync(async (req, res, next) => {
-	const users = await User.findAll();
+	const users = await User.findAll({
+		include: Post,
+	});
 
 	res.status(200).json({
 		status: 'success',
