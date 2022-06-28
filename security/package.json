@@ -1,0 +1,21 @@
+{
+	"name": "express-basics",
+	"version": "1.0.0",
+	"description": "First project",
+	"main": "index.js",
+	"scripts": {
+		"start": "nodemon server.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.18.1",
+		"express-validator": "^6.14.2",
+		"pg": "^8.7.3",
+		"pg-hstore": "^2.3.4",
+		"sequelize": "^6.21.0"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.16"
+	}
+}
