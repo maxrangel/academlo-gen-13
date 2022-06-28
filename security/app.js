@@ -16,6 +16,13 @@ const app = express();
 app.use(express.json());
 
 // Define endpoints
+
+// 1. Create comments router
+// 2. Create comments controller
+// 2.1 Create CRUD functions in controller
+// 2.2 Use catchAsync
+// 2.3 Create middleware to check if comment exist by id, if not, send error with AppError
+
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/posts', postsRouter);
 
