@@ -6,6 +6,9 @@ const { catchAsync } = require('../utils/catchAsync.util');
 const { AppError } = require('../utils/appError.util');
 
 const getAllPosts = catchAsync(async (req, res, next) => {
+	// Include user (post's author)
+	// Include comments
+	// Include user (comment's author)
 	const posts = await Post.findAll();
 
 	res.status(200).json({
