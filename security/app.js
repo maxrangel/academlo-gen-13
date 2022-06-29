@@ -3,6 +3,7 @@ const express = require('express');
 // Routers
 const { usersRouter } = require('./routes/users.routes');
 const { postsRouter } = require('./routes/posts.routes');
+const { commentsRouter } = require('./routes/comments.routes');
 
 // Global err controller
 const { globalErrorHandler } = require('./controllers/error.controller');
@@ -25,6 +26,7 @@ app.use(express.json());
 
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/posts', postsRouter);
+app.use('/api/v1/comments', commentsRouter);
 
 // Handle incoming unknown routes to the server
 app.all('*', (req, res, next) => {
