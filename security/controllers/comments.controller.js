@@ -1,11 +1,24 @@
 // Models
 const { Comment } = require('../models/comment.model');
+const { User } = require('../models/user.model');
+const { Post } = require('../models/post.model');
 
 // Utils
 const { catchAsync } = require('../utils/catchAsync.util');
 
 const getAllComments = catchAsync(async (req, res, next) => {
-	const comments = await Comment.findAll();
+	// Deep includes
+	const comments = await Comment.findAll({
+		attributes: ['id', 'comment'],
+		include: [
+			{ model: User, attributes: ['id', 'name', 'email'] },
+			{
+				model: Post,
+				attributes: ['id', 'title', 'content'],
+				include: [{ model: User, attributes: ['id', 'name', 'email'] }],
+			},
+		],
+	});
 
 	res.status(200).json({
 		status: 'success',
