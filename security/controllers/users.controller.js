@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs');
+
 // Models
 const { User } = require('../models/user.model');
 const { Post } = require('../models/post.model');
@@ -8,8 +10,6 @@ const { catchAsync } = require('../utils/catchAsync.util');
 const { AppError } = require('../utils/appError.util');
 
 const getAllUsers = catchAsync(async (req, res, next) => {
-	// Include the comments made in the user's post
-	// Include the author (user) of each comment
 	const users = await User.findAll({
 		include: [
 			{ model: Post, include: { model: Comment, include: User } },
@@ -26,12 +26,19 @@ const getAllUsers = catchAsync(async (req, res, next) => {
 const createUser = catchAsync(async (req, res, next) => {
 	const { name, age, email, password } = req.body;
 
+	// Hash password
+	const salt = await bcrypt.genSalt(12);
+	const hashPassword = await bcrypt.hash(password, salt);
+
 	const newUser = await User.create({
 		name,
 		age,
 		email,
-		password,
+		password: hashPassword,
 	});
+
+	// Remove password from response
+	newUser.password = undefined;
 
 	res.status(201).json({
 		status: 'success',
@@ -66,10 +73,40 @@ const deleteUser = catchAsync(async (req, res, next) => {
 	res.status(204).json({ status: 'success' });
 });
 
+const login = catchAsync(async (req, res, next) => {
+	const { email, password } = req.body;
+
+	// Validate credentials (email)
+	const user = await User.findOne({
+		where: {
+			email,
+			status: 'active',
+		},
+	});
+
+	if (!user) {
+		return next(new AppError('Email not found', 404));
+	}
+
+	// Validate password
+	const isPasswordValid = await bcrypt.compare(password, user.password);
+
+	if (!isPasswordValid) {
+		return next(new AppError('Invalid password', 400));
+	}
+
+	// Generate JWT
+	// Send response
+	res.status(200).json({
+		status: 'success',
+	});
+});
+
 module.exports = {
 	getAllUsers,
 	createUser,
 	getUserById,
 	updateUser,
 	deleteUser,
+	login,
 };

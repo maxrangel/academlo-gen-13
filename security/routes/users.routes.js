@@ -7,6 +7,7 @@ const {
 	getUserById,
 	updateUser,
 	deleteUser,
+	login,
 } = require('../controllers/users.controller');
 
 // Middlewares
@@ -20,6 +21,8 @@ const usersRouter = express.Router();
 usersRouter.get('/', getAllUsers);
 
 usersRouter.post('/', createUserValidators, createUser);
+
+usersRouter.post('/login', login);
 
 usersRouter.get('/:id', userExists, getUserById);
 
