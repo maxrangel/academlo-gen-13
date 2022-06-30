@@ -85,17 +85,17 @@ const login = catchAsync(async (req, res, next) => {
 	});
 
 	if (!user) {
-		return next(new AppError('Email not found', 404));
+		return next(new AppError('Credentials invalid', 400));
 	}
 
 	// Validate password
 	const isPasswordValid = await bcrypt.compare(password, user.password);
 
 	if (!isPasswordValid) {
-		return next(new AppError('Invalid password', 400));
+		return next(new AppError('Credentials invalid', 400));
 	}
 
-	// Generate JWT
+	// Generate JWT (JsonWebToken)
 	// Send response
 	res.status(200).json({
 		status: 'success',
