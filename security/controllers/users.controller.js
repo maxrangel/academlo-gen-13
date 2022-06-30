@@ -1,6 +1,7 @@
 // Models
 const { User } = require('../models/user.model');
 const { Post } = require('../models/post.model');
+const { Comment } = require('../models/comment.model');
 
 // Utils
 const { catchAsync } = require('../utils/catchAsync.util');
@@ -10,7 +11,10 @@ const getAllUsers = catchAsync(async (req, res, next) => {
 	// Include the comments made in the user's post
 	// Include the author (user) of each comment
 	const users = await User.findAll({
-		include: Post,
+		include: [
+			{ model: Post, include: { model: Comment, include: User } },
+			{ model: Comment },
+		],
 	});
 
 	res.status(200).json({

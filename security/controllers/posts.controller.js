@@ -1,15 +1,29 @@
 // Models
 const { Post } = require('../models/post.model');
+const { User } = require('../models/user.model');
+const { Comment } = require('../models/comment.model');
 
 // Utils
 const { catchAsync } = require('../utils/catchAsync.util');
-const { AppError } = require('../utils/appError.util');
 
 const getAllPosts = catchAsync(async (req, res, next) => {
 	// Include user (post's author)
 	// Include comments
 	// Include user (comment's author)
-	const posts = await Post.findAll();
+	const posts = await Post.findAll({
+		attributes: ['id', 'title', 'content'],
+		include: [
+			{ model: User, attributes: ['id', 'name', 'email'] },
+			{
+				model: Comment,
+				attributes: ['id', 'comment'],
+				include: {
+					model: User,
+					attributes: ['id', 'name', 'email'],
+				},
+			},
+		],
+	});
 
 	res.status(200).json({
 		status: 'success',
