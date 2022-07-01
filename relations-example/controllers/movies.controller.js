@@ -60,3 +60,14 @@ exports.deleteMovie = catchAsync(async (req, res, next) => {
 
 	res.status(204).json({ status: 'success' });
 });
+
+exports.assignActorToMovie = catchAsync(async (req, res, next) => {
+	const { actorId, movieId } = req.body;
+
+	const actorInMovie = await ActorInMovie.create({ actorId, movieId });
+
+	res.status(201).json({
+		status: 'success',
+		actorInMovie,
+	});
+});

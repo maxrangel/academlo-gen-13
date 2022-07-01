@@ -1,5 +1,9 @@
 const { app } = require('./app');
 
+// Models
+const { Actor } = require('./models/actor.model');
+const { Movie } = require('./models/movie.model');
+
 // Utils
 const { sequelize } = require('./util/database');
 
@@ -8,6 +12,10 @@ sequelize
 	.authenticate()
 	.then(() => console.log('Database authenticated'))
 	.catch(err => console.log(err));
+
+// Init models relations
+Actor.belongsToMany(Movie, { foreignKey: 'movieId', through: 'actorInMovie' });
+Movie.belongsToMany(Actor, { foreignKey: 'actorId', through: 'actorInMovie' });
 
 // Database synced with models' relations
 sequelize

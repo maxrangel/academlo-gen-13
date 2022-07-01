@@ -7,11 +7,14 @@ const {
 	createMovie,
 	updateMovie,
 	deleteMovie,
+	assignActorToMovie,
 } = require('../controllers/movies.controller');
 
 const router = express.Router();
 
 router.route('/').get(getAllMovies).post(createMovie);
+
+router.post('/assign-actor', assignActorToMovie);
 
 router.route('/:id').get(getMovieById).patch(updateMovie).delete(deleteMovie);
 
