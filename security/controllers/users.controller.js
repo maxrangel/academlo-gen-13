@@ -1,4 +1,6 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 
 // Models
 const { User } = require('../models/user.model');
@@ -9,7 +11,39 @@ const { Comment } = require('../models/comment.model');
 const { catchAsync } = require('../utils/catchAsync.util');
 const { AppError } = require('../utils/appError.util');
 
+// Gen secrets for JWT, require('crypto').randomBytes(64).toString('hex')
+
+dotenv.config({ path: './config.env' });
+
 const getAllUsers = catchAsync(async (req, res, next) => {
+	let token;
+
+	// Extract the token from headers
+	if (
+		req.headers.authorization &&
+		req.headers.authorization.startsWith('Bearer')
+	) {
+		token = req.headers.authorization.split(' ')[1];
+	}
+
+	if (!token) {
+		return next(new AppError('Invalid token', 403));
+	}
+
+	// Ask JWT (library), if the token is still valid
+	const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+
+	// Check in db that user still exists
+	const user = await User.findOne({
+		where: { id: decoded.id, status: 'active' },
+	});
+
+	if (!user) {
+		return next(
+			new AppError('The owner of this token doesnt exist anymore', 403)
+		);
+	}
+
 	const users = await User.findAll({
 		include: [
 			{ model: Post, include: { model: Comment, include: User } },
@@ -96,9 +130,14 @@ const login = catchAsync(async (req, res, next) => {
 	}
 
 	// Generate JWT (JsonWebToken)
+	const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+		expiresIn: '5m',
+	});
+
 	// Send response
 	res.status(200).json({
 		status: 'success',
+		token,
 	});
 });
 
