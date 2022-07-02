@@ -16,34 +16,6 @@ const { AppError } = require('../utils/appError.util');
 dotenv.config({ path: './config.env' });
 
 const getAllUsers = catchAsync(async (req, res, next) => {
-	let token;
-
-	// Extract the token from headers
-	if (
-		req.headers.authorization &&
-		req.headers.authorization.startsWith('Bearer')
-	) {
-		token = req.headers.authorization.split(' ')[1];
-	}
-
-	if (!token) {
-		return next(new AppError('Invalid token', 403));
-	}
-
-	// Ask JWT (library), if the token is still valid
-	const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-
-	// Check in db that user still exists
-	const user = await User.findOne({
-		where: { id: decoded.id, status: 'active' },
-	});
-
-	if (!user) {
-		return next(
-			new AppError('The owner of this token doesnt exist anymore', 403)
-		);
-	}
-
 	const users = await User.findAll({
 		include: [
 			{ model: Post, include: { model: Comment, include: User } },
@@ -129,9 +101,9 @@ const login = catchAsync(async (req, res, next) => {
 		return next(new AppError('Credentials invalid', 400));
 	}
 
-	// Generate JWT (JsonWebToken)
+	// Generate JWT (JsonWebToken) ->
 	const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-		expiresIn: '5m',
+		expiresIn: '30d',
 	});
 
 	// Send response

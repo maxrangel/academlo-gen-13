@@ -15,19 +15,23 @@ const {
 	createUserValidators,
 } = require('../middlewares/validators.middleware');
 const { userExists } = require('../middlewares/users.middleware');
+const { protectSession } = require('../middlewares/auth.middleware');
 
 const usersRouter = express.Router();
-
-usersRouter.get('/', getAllUsers);
 
 usersRouter.post('/', createUserValidators, createUser);
 
 usersRouter.post('/login', login);
 
-usersRouter.get('/:id', userExists, getUserById);
+usersRouter.use(protectSession);
 
-usersRouter.patch('/:id', userExists, updateUser);
+usersRouter.get('/', getAllUsers);
 
-usersRouter.delete('/:id', userExists, deleteUser);
+usersRouter
+	.use('/:id', userExists)
+	.route('/:id')
+	.get(getUserById)
+	.patch(updateUser)
+	.delete(deleteUser);
 
 module.exports = { usersRouter };
