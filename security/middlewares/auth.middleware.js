@@ -45,11 +45,16 @@ const protectSession = catchAsync(async (req, res, next) => {
 	next();
 });
 
-// Create middleware that:
-// 1. Get the session user's id
-// 2. Validate that the user that is being updated/deleted is the same as the session user
-// 3. If the id's don't match, return error (403)
-// 4. Apply middleware only in PATCH and DELETE endpoints
-const protectUserAccount = () => {};
+const protectUserAccount = (req, res, next) => {
+	// const { id } = req.params -> Alternative
+	const { sessionUser, user } = req;
 
-module.exports = { protectSession };
+	// If the id's don't match, return error (403)
+	if (sessionUser.id !== user.id) {
+		return next(new AppError('You do not own this account', 403));
+	}
+
+	next();
+};
+
+module.exports = { protectSession, protectUserAccount };
