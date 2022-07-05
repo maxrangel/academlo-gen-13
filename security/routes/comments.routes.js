@@ -11,17 +11,19 @@ const {
 
 // Middlewares
 const { commentExists } = require('../middlewares/comments.middleware');
+const { protectSession } = require('../middlewares/auth.middleware');
 
 const commentsRouter = express.Router();
 
-commentsRouter.get('/', getAllComments);
+commentsRouter.use(protectSession);
 
-commentsRouter.post('/', createComment);
+commentsRouter.route('/').get(getAllComments).post(createComment);
 
-commentsRouter.get('/:id', commentExists, getCommentById);
-
-commentsRouter.patch('/:id', commentExists, updateComment);
-
-commentsRouter.delete('/:id', commentExists, deleteComment);
+commentsRouter
+	.use('/:id', commentExists)
+	.route('/:id')
+	.get(getCommentById)
+	.patch(updateComment)
+	.delete(deleteComment);
 
 module.exports = { commentsRouter };

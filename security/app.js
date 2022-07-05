@@ -1,4 +1,5 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 
 // Routers
 const { usersRouter } = require('./routes/users.routes');
@@ -14,16 +15,19 @@ const { AppError } = require('./utils/appError.util');
 // Init express app
 const app = express();
 
+// Enable incoming JSON
 app.use(express.json());
 
+// Limit the number of requests that can be accepted to our server
+const limiter = rateLimit({
+	max: 10000,
+	windowMs: 60 * 60 * 1000, // 1 hr
+	message: 'Number of requests have been exceeded',
+});
+
+app.use(limiter);
+
 // Define endpoints
-
-// 1. Create comments router
-// 2. Create comments controller
-// 2.1 Create CRUD functions in controller
-// 2.2 Use catchAsync
-// 2.3 Create middleware to check if comment exist by id, if not, send error with AppError
-
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/posts', postsRouter);
 app.use('/api/v1/comments', commentsRouter);

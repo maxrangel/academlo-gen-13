@@ -27,10 +27,11 @@ const getAllComments = catchAsync(async (req, res, next) => {
 });
 
 const createComment = catchAsync(async (req, res, next) => {
-	const { userId, postId, comment } = req.body;
+	const { postId, comment } = req.body;
+	const { sessionUser } = req;
 
 	const newComment = await Comment.create({
-		userId,
+		userId: sessionUser.id,
 		postId,
 		comment,
 	});

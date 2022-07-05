@@ -11,17 +11,19 @@ const {
 
 // Middlewares
 const { postExists } = require('../middlewares/posts.middleware');
+const { protectSession } = require('../middlewares/auth.middleware');
 
 const postsRouter = express.Router();
 
-postsRouter.get('/', getAllPosts);
+postsRouter.use(protectSession);
 
-postsRouter.post('/', createPost);
+postsRouter.route('/').get(getAllPosts).post(createPost);
 
-postsRouter.get('/:id', postExists, getPostById);
-
-postsRouter.patch('/:id', postExists, updatePost);
-
-postsRouter.delete('/:id', postExists, deletePost);
+postsRouter
+	.use('/:id', postExists)
+	.route('/:id')
+	.get(getPostById)
+	.patch(updatePost)
+	.delete(deletePost);
 
 module.exports = { postsRouter };
