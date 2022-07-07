@@ -16,7 +16,7 @@ const taskExists = catchAsync(async (req, res, next) => {
     return next(new AppError('Task does not exist with given Id', 404));
   }
 
-  // Add user data to the req object
+  // Add task data to the req object
   req.task = task;
   next();
 });

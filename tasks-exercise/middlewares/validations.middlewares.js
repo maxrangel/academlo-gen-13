@@ -33,6 +33,21 @@ const createUserValidations = [
   checkValidations,
 ];
 
+const createTaskValidations = [
+  body('title')
+    .notEmpty()
+    .withMessage('Title cannot be empty')
+    .isString()
+    .withMessage('Title must be a string'),
+  body('userId')
+    .isNumeric()
+    .withMessage('User id must be a number')
+    .custom(val => val > 0)
+    .withMessage('User id cannot be a negative value'),
+  checkValidations,
+];
+
 module.exports = {
   createUserValidations,
+  createTaskValidations,
 };

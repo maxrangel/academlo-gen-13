@@ -3,8 +3,12 @@
 	"version": "1.0.0",
 	"description": "First project",
 	"main": "index.js",
+	"engines": {
+		"node": "^14.x"
+	},
 	"scripts": {
-		"start": "nodemon server.js"
+		"start": "node server.js",
+		"start:dev": "nodemon server.js"
 	},
 	"author": "",
 	"license": "ISC",

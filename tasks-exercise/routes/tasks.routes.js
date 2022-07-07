@@ -2,6 +2,9 @@ const express = require('express');
 
 // Middlewares
 const { taskExists } = require('../middlewares/tasks.middlewares');
+const {
+  createTaskValidations,
+} = require('../middlewares/validations.middlewares');
 
 // Controller
 const {
@@ -14,7 +17,7 @@ const {
 
 const router = express.Router();
 
-router.post('/', createTask);
+router.post('/', createTaskValidations, createTask);
 
 router.get('/', getAllTasks);
 
