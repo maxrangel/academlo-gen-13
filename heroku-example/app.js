@@ -3,6 +3,7 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
+const path = require('path');
 
 // Routers
 const { usersRouter } = require('./routes/users.routes');
@@ -21,6 +22,12 @@ const app = express();
 
 // Enable incoming JSON
 app.use(express.json());
+
+// Set template engine
+app.set('view engine', 'pug');
+
+// Serving static files
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Limit the number of requests that can be accepted to our server
 const limiter = rateLimit({
