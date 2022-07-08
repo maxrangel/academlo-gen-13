@@ -8,7 +8,16 @@ html(lang="en")
 		title NodeJs
 	
 	body
-		h1(class="title") Rendered from NodeJS
+		h1(class="title") #{title}
+
+		div(class="container")
+			if posts.length === 0
+				p No posts available 
+			else
+				each post in posts
+					div(class="post-card")
+						h3 #{post.title}
+						p #{post.content}
 
 	script(src="./index.js")
 
