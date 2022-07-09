@@ -43,8 +43,11 @@ class Email {
 		await this.send('welcome', 'Welcome to our app', { name });
 	}
 
-	async sendNewPost() {
-		await this.send('newPost', 'You have created a new post');
+	async sendNewPost(title, content) {
+		await this.send('newPost', 'You have created a new post', {
+			title,
+			content,
+		});
 	}
 }
 

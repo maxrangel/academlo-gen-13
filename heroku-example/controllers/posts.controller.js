@@ -43,10 +43,8 @@ const createPost = catchAsync(async (req, res, next) => {
 	});
 
 	// Send mail when post has been created
-	// 1. Send the mail to the user who created the post
-	// 2. Send the title and content of the created post through the email
 	// 3. Give some style to the email
-	new Email().sendNewPost();
+	await new Email(sessionUser.email).sendNewPost(title, content);
 
 	res.status(201).json({
 		status: 'success',
