@@ -1,3 +1,5 @@
+const { ref, uploadBytes } = require('firebase/storage');
+
 // Models
 const { Post } = require('../models/post.model');
 const { User } = require('../models/user.model');
@@ -6,6 +8,7 @@ const { Comment } = require('../models/comment.model');
 // Utils
 const { catchAsync } = require('../utils/catchAsync.util');
 const { Email } = require('../utils/email.util');
+const { storage } = require('../utils/firebase.util');
 
 const getAllPosts = catchAsync(async (req, res, next) => {
 	// Include user (post's author)
@@ -35,6 +38,12 @@ const getAllPosts = catchAsync(async (req, res, next) => {
 const createPost = catchAsync(async (req, res, next) => {
 	const { title, content } = req.body;
 	const { sessionUser } = req;
+
+	const imgRef = ref(storage, `${Date.now()}_${req.file.originalname}`);
+
+	const imgRes = await uploadBytes(imgRef, req.file.buffer);
+
+	console.log(imgRes);
 
 	// const newPost = await Post.create({
 	// 	title,
