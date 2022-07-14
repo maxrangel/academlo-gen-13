@@ -40,38 +40,45 @@ const createPost = catchAsync(async (req, res, next) => {
 	const { title, content } = req.body;
 	const { sessionUser } = req;
 
-	const imgRef = ref(storage, `posts/${Date.now()}_${req.file.originalname}`);
+	// const newPost = await Post.create({
+	// 	title,
+	// 	content,
+	// 	userId: sessionUser.id,
+	// });
 
-	const imgRes = await uploadBytes(imgRef, req.file.buffer);
+	console.log(req.files);
 
-	const newPost = await Post.create({
-		title,
-		content,
-		userId: sessionUser.id,
-	});
+	// const imgRef = ref(storage, `posts/${Date.now()}_${req.file.originalname}`);
 
-	await PostImg.create({
-		postId: newPost.id,
-		imgUrl: imgRes.metadata.fullPath,
-	});
+	// const imgRes = await uploadBytes(imgRef, req.file.buffer);
 
-	// Send mail when post has been created
-	await new Email(sessionUser.email).sendNewPost(title, content);
+	// await PostImg.create({
+	// 	postId: newPost.id,
+	// 	imgUrl: imgRes.metadata.fullPath,
+	// });
+
+	// // Send mail when post has been created
+	// await new Email(sessionUser.email).sendNewPost(title, content);
 
 	res.status(201).json({
 		status: 'success',
-		newPost,
+		// newPost,
 	});
 });
 
 const getPostById = catchAsync(async (req, res, next) => {
 	const { post } = req;
 
-	const imgRef = ref(storage, post.postImgs[0].imgUrl);
+	// Map async
+	const postImgsPromises = post.postImgs.map(async postImg => {
+		const imgRef = ref(storage, postImg.imgUrl);
 
-	const imgFullPath = await getDownloadURL(imgRef);
+		const imgFullPath = await getDownloadURL(imgRef);
 
-	post.postImgs[0].imgUrl = imgFullPath;
+		postImg.imgUrl = imgFullPath;
+	});
+
+	await Promise.all(postImgsPromises);
 
 	res.status(200).json({
 		status: 'success',

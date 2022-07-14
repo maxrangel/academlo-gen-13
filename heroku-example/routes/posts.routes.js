@@ -23,7 +23,7 @@ postsRouter.use(protectSession);
 postsRouter
 	.route('/')
 	.get(getAllPosts)
-	.post(upload.single('postImg'), createPost);
+	.post(upload.array('postImg', 3), createPost);
 
 postsRouter
 	.use('/:id', postExists)
