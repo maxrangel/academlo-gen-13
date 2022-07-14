@@ -40,29 +40,32 @@ const createPost = catchAsync(async (req, res, next) => {
 	const { title, content } = req.body;
 	const { sessionUser } = req;
 
-	// const newPost = await Post.create({
-	// 	title,
-	// 	content,
-	// 	userId: sessionUser.id,
-	// });
+	const newPost = await Post.create({
+		title,
+		content,
+		userId: sessionUser.id,
+	});
 
-	console.log(req.files);
+	if (req.files.length > 0) {
+		const filesPromises = req.files.map(async file => {
+			const imgRef = ref(storage, `posts/${Date.now()}_${file.originalname}`);
+			const imgRes = await uploadBytes(imgRef, file.buffer);
 
-	// const imgRef = ref(storage, `posts/${Date.now()}_${req.file.originalname}`);
+			return await PostImg.create({
+				postId: newPost.id,
+				imgUrl: imgRes.metadata.fullPath,
+			});
+		});
 
-	// const imgRes = await uploadBytes(imgRef, req.file.buffer);
+		await Promise.all(filesPromises);
+	}
 
-	// await PostImg.create({
-	// 	postId: newPost.id,
-	// 	imgUrl: imgRes.metadata.fullPath,
-	// });
-
-	// // Send mail when post has been created
-	// await new Email(sessionUser.email).sendNewPost(title, content);
+	// Send mail when post has been created
+	await new Email(sessionUser.email).sendNewPost(title, content);
 
 	res.status(201).json({
 		status: 'success',
-		// newPost,
+		newPost,
 	});
 });
 
