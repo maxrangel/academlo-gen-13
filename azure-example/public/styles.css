@@ -1,0 +1,16 @@
+.title {
+	color: red;
+}
+
+.container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+
+	width: 75%;
+}
+
+.post-card {
+	width: 90%;
+	border: 1px solid black;
+}
