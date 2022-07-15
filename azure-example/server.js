@@ -4,6 +4,7 @@ const { initModels } = require('./models/initModels');
 
 // Utils
 const { db } = require('./utils/database.util');
+const { containerClient } = require('./utils/azureStorage.util');
 
 db.authenticate()
 	.then(() => console.log('Db authenticated'))
