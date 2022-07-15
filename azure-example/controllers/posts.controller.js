@@ -1,11 +1,13 @@
 // Models
 const { Post } = require('../models/post.model');
+const { PostImg } = require('../models/postImg.model');
 const { User } = require('../models/user.model');
 const { Comment } = require('../models/comment.model');
 
 // Utils
 const { catchAsync } = require('../utils/catchAsync.util');
 const { Email } = require('../utils/email.util');
+const { uploadImage, getImage } = require('../utils/azureStorage.util');
 
 const getAllPosts = catchAsync(async (req, res, next) => {
 	// Include user (post's author)
@@ -42,6 +44,15 @@ const createPost = catchAsync(async (req, res, next) => {
 		userId: sessionUser.id,
 	});
 
+	const blobName = `${Date.now()}_${req.file.originalname}`;
+
+	await uploadImage(req.file, blobName);
+
+	await PostImg.create({
+		postId: newPost.id,
+		imgUrl: blobName,
+	});
+
 	// Send mail when post has been created
 	await new Email(sessionUser.email).sendNewPost(title, content);
 
@@ -53,6 +64,16 @@ const createPost = catchAsync(async (req, res, next) => {
 
 const getPostById = catchAsync(async (req, res, next) => {
 	const { post } = req;
+
+	const postImgsPromises = post.postImgs.map(async postImg => {
+		const downloadedImg = await getImage(postImg.imgUrl);
+
+		return downloadedImg;
+	});
+
+	const postImgsResolved = await Promise.all(postImgsPromises);
+
+	console.log(postImgsResolved);
 
 	res.status(200).json({
 		status: 'success',

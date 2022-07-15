@@ -7,13 +7,27 @@ const blobClient = BlobServiceClient.fromConnectionString(
 	process.env.AZURE_STORAGE_CONNECTION_STRING
 );
 
-const containerClient = blobClient.getContainerClient('blogs-imgs');
+const getContainerClient = async () => {
+	const containerClient = blobClient.getContainerClient('blogs-imgs');
 
-containerClient
-	.createIfNotExists()
-	.then(res => {
-		console.log(res);
-	})
-	.catch(err => console.log(err));
+	await containerClient.createIfNotExists();
 
-module.exports = { containerClient };
+	return containerClient;
+};
+
+const uploadImage = async (img, blobName) => {
+	const containerClient = await getContainerClient();
+
+	const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+	await blockBlobClient.upload(img.buffer, img.buffer.length);
+};
+
+const getImage = async blobName => {
+	const containerClient = await getContainerClient();
+	const blobClient = containerClient.getBlobClient(blobName);
+
+	return await blobClient.download();
+};
+
+module.exports = { uploadImage, getImage };
