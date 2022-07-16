@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/19440815-b284-485e-a46b-51bb712a7176/microsoft.web/sites/subscriptions/19440815-b284-485e-a46b-51bb712a7176/resourceGroups/rg-blogs-gen-13/providers/Microsoft.Web/sites/blogs-gen-13",
+  "appService.deploySubpath": "."
+}
