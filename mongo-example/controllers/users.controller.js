@@ -4,8 +4,8 @@ const dotenv = require('dotenv');
 
 // Models
 const { User } = require('../models/user.model');
-const { Post } = require('../models/post.model');
-const { Comment } = require('../models/comment.model');
+// const { Post } = require('../models/post.model');
+// const { Comment } = require('../models/comment.model');
 
 // Utils
 const { catchAsync } = require('../utils/catchAsync.util');
@@ -17,12 +17,7 @@ const { Email } = require('../utils/email.util');
 dotenv.config({ path: './config.env' });
 
 const getAllUsers = catchAsync(async (req, res, next) => {
-	const users = await User.findAll({
-		include: [
-			{ model: Post, include: { model: Comment, include: User } },
-			{ model: Comment },
-		],
-	});
+	const users = await User.find();
 
 	res.status(200).json({
 		status: 'success',
@@ -31,7 +26,7 @@ const getAllUsers = catchAsync(async (req, res, next) => {
 });
 
 const createUser = catchAsync(async (req, res, next) => {
-	const { name, age, email, password } = req.body;
+	const { name, age, email, password, hobbies, address } = req.body;
 
 	// Hash password
 	const salt = await bcrypt.genSalt(12);
@@ -42,13 +37,15 @@ const createUser = catchAsync(async (req, res, next) => {
 		age,
 		email,
 		password: hashPassword,
+		hobbies,
+		address,
 	});
 
 	// Remove password from response
 	newUser.password = undefined;
 
 	// Send welcome email
-	await new Email(email).sendWelcome(name);
+	// await new Email(email).sendWelcome(name);
 
 	res.status(201).json({
 		status: 'success',

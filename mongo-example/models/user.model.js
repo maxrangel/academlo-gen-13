@@ -1,35 +1,19 @@
-// const { db, DataTypes } = require('../utils/database.util');
+const mongoose = require('mongoose');
 
-// // Create our first model (table)
-// const User = db.define('user', {
-// 	id: {
-// 		primaryKey: true,
-// 		type: DataTypes.INTEGER,
-// 		autoIncrement: true,
-// 		allowNull: false,
-// 	},
-// 	name: {
-// 		type: DataTypes.STRING,
-// 		allowNull: false,
-// 	},
-// 	age: {
-// 		type: DataTypes.INTEGER,
-// 		allowNull: false,
-// 	},
-// 	email: {
-// 		type: DataTypes.STRING,
-// 		allowNull: false,
-// 		unique: true,
-// 	},
-// 	password: {
-// 		type: DataTypes.STRING,
-// 		allowNull: false,
-// 	},
-// 	status: {
-// 		type: DataTypes.STRING,
-// 		allowNull: false,
-// 		defaultValue: 'active',
-// 	},
-// });
+const userSchema = new mongoose.Schema({
+	name: String,
+	age: Number,
+	email: String,
+	password: String,
+	status: String,
+	hobbies: [String],
+	address: {
+		country: String,
+		state: String,
+		zipCode: Number,
+	},
+});
 
-// module.exports = { User };
+const User = mongoose.model('User', userSchema);
+
+module.exports = { User };
