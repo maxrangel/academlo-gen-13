@@ -1,25 +1,20 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 dotenv.config({ path: './config.env' });
 
-const db = new Sequelize({
-	dialect: 'postgres',
-	host: process.env.DB_HOST,
-	username: process.env.DB_USER,
-	password: process.env.DB_PASSWORD,
-	port: process.env.DB_PORT,
-	database: process.env.DB,
-	logging: false,
-	dialectOptions:
-		process.env.NODE_ENV === 'production'
-			? {
-					ssl: {
-						required: true,
-						rejectUnauthorized: false,
-					},
-			  }
-			: {},
+const MONGO_URL = process.env.MONGO_URI;
+
+mongoose.connection.once('open', () => {
+	console.log('MongoDB connection ready!');
 });
 
-module.exports = { db, DataTypes };
+mongoose.connection.on('error', err => {
+	console.log(err);
+});
+
+const connectMongo = async () => {
+	await mongoose.connect(MONGO_URL);
+};
+
+module.exports = { connectMongo };
