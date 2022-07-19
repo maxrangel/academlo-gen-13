@@ -31,7 +31,8 @@ const protectSession = catchAsync(async (req, res, next) => {
 
 	// Check in db that user still exists
 	const user = await User.findOne({
-		where: { id: decoded.id, status: 'active' },
+		_id: decoded.id,
+		status: 'active',
 	});
 
 	if (!user) {
@@ -49,8 +50,11 @@ const protectUserAccount = (req, res, next) => {
 	// const { id } = req.params -> Alternative
 	const { sessionUser, user } = req;
 
+	console.log(sessionUser._id);
+	console.log(user);
+
 	// If the id's don't match, return error (403)
-	if (sessionUser.id !== user.id) {
+	if (sessionUser._id !== user._id) {
 		return next(new AppError('You do not own this account', 403));
 	}
 

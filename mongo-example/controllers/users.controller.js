@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
 // Models
 const { User } = require('../models/user.model');
@@ -27,6 +28,12 @@ const getAllUsers = catchAsync(async (req, res, next) => {
 
 const createUser = catchAsync(async (req, res, next) => {
 	const { name, age, email, password, hobbies, address } = req.body;
+
+	const userExists = await User.findOne({ email });
+
+	if (userExists) {
+		return next(new AppError('Email already taken', 400));
+	}
 
 	// Hash password
 	const salt = await bcrypt.genSalt(12);
@@ -74,7 +81,6 @@ const updateUser = catchAsync(async (req, res, next) => {
 const deleteUser = catchAsync(async (req, res, next) => {
 	const { user } = req;
 
-	// await user.destroy();
 	await user.update({ status: 'deleted' });
 
 	res.status(204).json({ status: 'success' });
@@ -85,10 +91,8 @@ const login = catchAsync(async (req, res, next) => {
 
 	// Validate credentials (email)
 	const user = await User.findOne({
-		where: {
-			email,
-			status: 'active',
-		},
+		email,
+		status: 'active',
 	});
 
 	if (!user) {
@@ -103,7 +107,7 @@ const login = catchAsync(async (req, res, next) => {
 	}
 
 	// Generate JWT (JsonWebToken) ->
-	const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+	const token = await jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
 		expiresIn: '30d',
 	});
 
@@ -111,6 +115,7 @@ const login = catchAsync(async (req, res, next) => {
 	res.status(200).json({
 		status: 'success',
 		token,
+		user,
 	});
 });
 
