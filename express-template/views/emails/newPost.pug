@@ -1,0 +1,8 @@
+extends base
+
+block emailContent
+  p A new post has been created
+
+  div(class="post-card")
+    h3(class="post-card__title") #{title}
+    p(class="post-card__content") #{content}
