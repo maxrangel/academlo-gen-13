@@ -1,25 +1,20 @@
-// const { db, DataTypes } = require('../utils/database.util');
+const mongoose = require('mongoose');
 
-// const PostImg = db.define('postImg', {
-// 	id: {
-// 		primaryKey: true,
-// 		type: DataTypes.INTEGER,
-// 		autoIncrement: true,
-// 		allowNull: false,
-// 	},
-// 	postId: {
-// 		type: DataTypes.INTEGER,
-// 		allowNull: false,
-// 	},
-// 	imgUrl: {
-// 		type: DataTypes.STRING,
-// 		allowNull: false,
-// 	},
-// 	status: {
-// 		type: DataTypes.STRING,
-// 		allowNull: false,
-// 		defaultValue: 'active',
-// 	},
-// });
+const postImgSchema = new mongoose.Schema({
+	imgUrl: {
+		type: String,
+		required: [true, 'Please provide an img url'],
+	},
+	postId: {
+		type: mongoose.Schema.ObjectId,
+		ref: 'Post',
+	},
+	status: {
+		type: String,
+		default: 'active',
+	},
+});
 
-// module.exports = { PostImg };
+const PostImg = mongoose.model('PostImg', postImgSchema);
+
+module.exports = { PostImg };

@@ -10,23 +10,25 @@ const { Email } = require('../utils/email.util');
 const { uploadImage, getImage } = require('../utils/azureStorage.util');
 
 const getAllPosts = catchAsync(async (req, res, next) => {
-	const posts = await Post.findAll({
-		where: { status: 'active' },
-		attributes: ['id', 'title', 'content'],
-		include: [
-			{ model: User, attributes: ['id', 'name', 'email'] },
-			{
-				model: Comment,
-				required: false, // OUTER JOIN
-				where: { status: 'active' },
-				attributes: ['id', 'comment', 'status'],
-				include: {
-					model: User,
-					attributes: ['id', 'name', 'email'],
-				},
-			},
-		],
-	});
+	const posts = await Post.find({ status: 'active' });
+
+	// const posts = await Post.findAll({
+	// 	where: { status: 'active' },
+	// 	attributes: ['id', 'title', 'content'],
+	// 	include: [
+	// 		{ model: User, attributes: ['id', 'name', 'email'] },
+	// 		{
+	// 			model: Comment,
+	// 			required: false, // OUTER JOIN
+	// 			where: { status: 'active' },
+	// 			attributes: ['id', 'comment', 'status'],
+	// 			include: {
+	// 				model: User,
+	// 				attributes: ['id', 'name', 'email'],
+	// 			},
+	// 		},
+	// 	],
+	// });
 
 	res.status(200).json({
 		status: 'success',
@@ -41,17 +43,17 @@ const createPost = catchAsync(async (req, res, next) => {
 	const newPost = await Post.create({
 		title,
 		content,
-		userId: sessionUser.id,
+		userId: sessionUser._id,
 	});
 
-	const blobName = `${Date.now()}_${req.file.originalname}`;
+	// const blobName = `${Date.now()}_${req.file.originalname}`;
 
-	await uploadImage(req.file, blobName);
+	// await uploadImage(req.file, blobName);
 
-	await PostImg.create({
-		postId: newPost.id,
-		imgUrl: blobName,
-	});
+	// await PostImg.create({
+	// 	postId: newPost.id,
+	// 	imgUrl: blobName,
+	// });
 
 	// Send mail when post has been created
 	await new Email(sessionUser.email).sendNewPost(title, content);
@@ -72,6 +74,7 @@ const getPostById = catchAsync(async (req, res, next) => {
 });
 
 const updatePost = catchAsync(async (req, res, next) => {
+	const { title, content } = req.body;
 	const { post } = req;
 
 	await post.update({ title, content });

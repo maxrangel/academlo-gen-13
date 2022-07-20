@@ -1,29 +1,24 @@
-// const { db, DataTypes } = require('../utils/database.util');
+const mongoose = require('mongoose');
 
-// const Comment = db.define('comment', {
-// 	id: {
-// 		primaryKey: true,
-// 		type: DataTypes.INTEGER,
-// 		autoIncrement: true,
-// 		allowNull: false,
-// 	},
-// 	userId: {
-// 		type: DataTypes.INTEGER,
-// 		allowNull: false,
-// 	},
-// 	postId: {
-// 		type: DataTypes.INTEGER,
-// 		allowNull: false,
-// 	},
-// 	comment: {
-// 		type: DataTypes.STRING,
-// 		allowNull: false,
-// 	},
-// 	status: {
-// 		type: DataTypes.STRING,
-// 		allowNull: false,
-// 		defaultValue: 'active',
-// 	},
-// });
+const commentSchema = new mongoose.Schema({
+	comment: {
+		type: String,
+		required: [true, 'Please provide a comment'],
+	},
+	userId: {
+		type: mongoose.Schema.ObjectId,
+		ref: 'User',
+	},
+	postId: {
+		type: mongoose.Schema.ObjectId,
+		ref: 'Post',
+	},
+	status: {
+		type: String,
+		default: 'active',
+	},
+});
 
-// module.exports = { Comment };
+const Comment = mongoose.model('Comment', commentSchema);
+
+module.exports = { Comment };
