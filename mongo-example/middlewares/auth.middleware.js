@@ -50,11 +50,8 @@ const protectUserAccount = (req, res, next) => {
 	// const { id } = req.params -> Alternative
 	const { sessionUser, user } = req;
 
-	console.log(sessionUser._id);
-	console.log(user);
-
 	// If the id's don't match, return error (403)
-	if (sessionUser._id !== user._id) {
+	if (!sessionUser._id.equals(user._id)) {
 		return next(new AppError('You do not own this account', 403));
 	}
 

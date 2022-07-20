@@ -22,21 +22,6 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		default: 'active',
 	},
-	address: {
-		country: {
-			type: String,
-			required: [true, 'Must provide your country name'],
-		},
-		state: {
-			type: String,
-			required: [true, 'Must provide a valid state'],
-		},
-		zipCode: {
-			type: String,
-			required: [true, 'Must provide your zipcode'],
-			minlength: 5,
-		},
-	},
 });
 
 const User = mongoose.model('User', userSchema);

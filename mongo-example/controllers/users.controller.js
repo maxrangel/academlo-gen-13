@@ -27,7 +27,7 @@ const getAllUsers = catchAsync(async (req, res, next) => {
 });
 
 const createUser = catchAsync(async (req, res, next) => {
-	const { name, age, email, password, hobbies, address } = req.body;
+	const { name, age, email, password } = req.body;
 
 	const userExists = await User.findOne({ email });
 
@@ -44,8 +44,6 @@ const createUser = catchAsync(async (req, res, next) => {
 		age,
 		email,
 		password: hashPassword,
-		hobbies,
-		address,
 	});
 
 	// Remove password from response

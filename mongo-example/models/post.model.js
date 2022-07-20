@@ -1,30 +1,24 @@
-// // Model's attributes: id, title, content, userId, status
-// const { db, DataTypes } = require('../utils/database.util');
+const mongoose = require('mongoose');
 
-// const Post = db.define('post', {
-// 	id: {
-// 		primaryKey: true,
-// 		type: DataTypes.INTEGER,
-// 		autoIncrement: true,
-// 		allowNull: false,
-// 	},
-// 	title: {
-// 		type: DataTypes.STRING,
-// 		allowNull: false,
-// 	},
-// 	content: {
-// 		type: DataTypes.STRING,
-// 		allowNull: false,
-// 	},
-// 	userId: {
-// 		type: DataTypes.INTEGER,
-// 		allowNull: false,
-// 	},
-// 	status: {
-// 		type: DataTypes.STRING,
-// 		allowNull: false,
-// 		defaultValue: 'active',
-// 	},
-// });
+const postSchema = new mongoose.Schema({
+	title: {
+		type: String,
+		required: [true, 'Please provide a title'],
+	},
+	content: {
+		type: String,
+		required: [true, 'Please provide a content'],
+	},
+	userId: {
+		type: mongoose.Schema.ObjectId,
+		ref: 'User',
+	},
+	status: {
+		type: String,
+		default: 'active',
+	},
+});
 
-// module.exports = { Post };
+const Post = mongoose.model('Post', postSchema);
+
+module.exports = { Post };
