@@ -8,17 +8,20 @@ const { catchAsync } = require('../utils/catchAsync.util');
 
 const getAllComments = catchAsync(async (req, res, next) => {
 	// Deep includes
-	const comments = await Comment.findAll({
-		attributes: ['id', 'comment'],
-		include: [
-			{ model: User, attributes: ['id', 'name', 'email'] },
-			{
-				model: Post,
-				attributes: ['id', 'title', 'content'],
-				include: [{ model: User, attributes: ['id', 'name', 'email'] }],
-			},
-		],
-	});
+
+	const comments = await Comment.find({ status: 'active' });
+
+	// const comments = await Comment.findAll({
+	// 	attributes: ['id', 'comment'],
+	// 	include: [
+	// 		{ model: User, attributes: ['id', 'name', 'email'] },
+	// 		{
+	// 			model: Post,
+	// 			attributes: ['id', 'title', 'content'],
+	// 			include: [{ model: User, attributes: ['id', 'name', 'email'] }],
+	// 		},
+	// 	],
+	// });
 
 	res.status(200).json({
 		status: 'success',
@@ -31,7 +34,7 @@ const createComment = catchAsync(async (req, res, next) => {
 	const { sessionUser } = req;
 
 	const newComment = await Comment.create({
-		userId: sessionUser.id,
+		userId: sessionUser._id,
 		postId,
 		comment,
 	});

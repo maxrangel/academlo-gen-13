@@ -8,7 +8,7 @@ const { AppError } = require('../utils/appError.util');
 const commentExists = catchAsync(async (req, res, next) => {
 	const { id } = req.params;
 
-	const comment = await Comment.findOne({ where: { id } });
+	const comment = await Comment.findById(id);
 
 	if (!comment) {
 		return next(new AppError('Comment not found', 404));
