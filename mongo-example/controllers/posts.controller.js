@@ -10,7 +10,10 @@ const { Email } = require('../utils/email.util');
 const { uploadImage, getImage } = require('../utils/azureStorage.util');
 
 const getAllPosts = catchAsync(async (req, res, next) => {
-	const posts = await Post.find({ status: 'active' });
+	const posts = await Post.find({ status: 'active' }).populate(
+		'userId',
+		'-password'
+	);
 
 	// const posts = await Post.findAll({
 	// 	where: { status: 'active' },
