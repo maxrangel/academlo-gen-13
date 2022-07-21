@@ -25,10 +25,11 @@ const getAllUsers = catchAsync(async (req, res, next) => {
 	// 	],
 	// });
 
-	const users = await User.find()
+	const users = await User.find({ status: 'active' }, '-password')
 		.populate({
 			path: 'posts',
-			populate: 'comments',
+			match: { status: 'active' },
+			populate: { path: 'comments', match: { status: 'active' } },
 		})
 		.populate('comments');
 
