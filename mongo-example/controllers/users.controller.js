@@ -18,7 +18,19 @@ const { Email } = require('../utils/email.util');
 dotenv.config({ path: './config.env' });
 
 const getAllUsers = catchAsync(async (req, res, next) => {
-	const users = await User.find().populate('posts');
+	// const users = await User.findAll({
+	// 	include: [
+	// 		{ model: Post, include: { model: Comment, include: User } },
+	// 		{ model: Comment },
+	// 	],
+	// });
+
+	const users = await User.find()
+		.populate({
+			path: 'posts',
+			populate: 'comments',
+		})
+		.populate('comments');
 
 	res.status(200).json({
 		status: 'success',

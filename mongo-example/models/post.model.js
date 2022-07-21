@@ -19,6 +19,8 @@ const postSchema = new mongoose.Schema({
 	},
 });
 
+// Create virtaul property for comments
+
 const Post = mongoose.model('Post', postSchema);
 
 module.exports = { Post };
