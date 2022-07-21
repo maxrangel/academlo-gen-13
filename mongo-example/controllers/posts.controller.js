@@ -10,28 +10,16 @@ const { Email } = require('../utils/email.util');
 const { uploadImage, getImage } = require('../utils/azureStorage.util');
 
 const getAllPosts = catchAsync(async (req, res, next) => {
-	const posts = await Post.find({ status: 'active' }).populate(
-		'userId',
-		'-password'
-	);
-
-	// const posts = await Post.findAll({
-	// 	where: { status: 'active' },
-	// 	attributes: ['id', 'title', 'content'],
-	// 	include: [
-	// 		{ model: User, attributes: ['id', 'name', 'email'] },
-	// 		{
-	// 			model: Comment,
-	// 			required: false, // OUTER JOIN
-	// 			where: { status: 'active' },
-	// 			attributes: ['id', 'comment', 'status'],
-	// 			include: {
-	// 				model: User,
-	// 				attributes: ['id', 'name', 'email'],
-	// 			},
-	// 		},
-	// 	],
-	// });
+	const posts = await Post.find({ status: 'active' }, '_id title content')
+		.populate({
+			path: 'userId',
+			select: '-password',
+		})
+		.populate({
+			path: 'comments',
+			match: { status: 'active' },
+			populate: { path: 'userId', select: '-password' },
+		});
 
 	res.status(200).json({
 		status: 'success',
