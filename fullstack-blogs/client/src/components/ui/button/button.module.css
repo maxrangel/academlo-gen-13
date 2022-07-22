@@ -1,0 +1,66 @@
+.btn {
+	text-decoration: none;
+	cursor: pointer;
+	font: inherit;
+	border-radius: 6px;
+	padding: 0.5rem 1.5rem;
+	text-align: center;
+	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.btn--primary {
+	background-color: #f85555;
+	border: 1px solid #f85555;
+	color: white;
+}
+
+/* Button size */
+.block {
+	width: 100%;
+}
+
+.lg {
+	width: 400px;
+}
+.md {
+	font-size: 16px;
+	padding: 0.2rem 0.5rem;
+	width: 120px;
+}
+
+.sm {
+	width: fit-content;
+	font-size: 14px;
+	padding: 0.2rem 0.5rem;
+}
+
+.btn--primary:hover,
+.btn--primary:active {
+	background-color: #ea3737;
+	border-color: #ea3737;
+}
+
+.btn--secondary {
+	background-color: #97dddf;
+	border: 1px solid #97dddf;
+	color: #114070;
+}
+
+.btn--secondary:hover,
+.btn--secondary:active {
+	background-color: #87c6c9;
+	border-color: #87c6c9;
+}
+
+.btn--tertiary {
+	background-color: transparent;
+	border: 2px solid #f85555;
+	color: #f85555;
+}
+
+.btn--tertiary:hover,
+.btn--tertiary:active {
+	background-color: #f4f4f4;
+}

@@ -1,0 +1,52 @@
+.header {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	padding: 1rem 10%;
+	height: 5rem;
+	background-color: #dcd9d9;
+}
+
+.navigation {
+	display: flex;
+	justify-content: space-around;
+
+	width: 20vh;
+}
+
+.navigation__link {
+	text-decoration: none;
+	cursor: pointer;
+	color: #4f4f4f;
+	font-size: 1rem;
+	font-weight: bold;
+}
+
+.navigation__link:hover {
+	color: #f85555c4;
+}
+
+.brand {
+	font-size: 1.5rem;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.brand a {
+	text-decoration: none;
+	color: #4f4f4f;
+	font-weight: bold;
+}
+
+@media (min-width: 768px) {
+	.logo {
+		font-size: 2.5rem;
+	}
+
+	.navigation a {
+		font-size: 1.5rem;
+	}
+}
