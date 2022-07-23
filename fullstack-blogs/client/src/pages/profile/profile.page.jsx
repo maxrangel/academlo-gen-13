@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 // Redux actions
 import { getMyPosts, getProfilePosts } from '../../store/actions/posts.actions';
-// import { checkToken } from '../../store/actions/user.actions';
+import { checkToken } from '../../store/actions/user.actions';
 
 // Components
 import PostsList from '../../components/posts/posts-list/post-list.component';
@@ -24,7 +24,7 @@ const Profile = () => {
 
 	useEffect(() => {
 		if (!isAuth) {
-			// dispatch(checkToken());
+			dispatch(checkToken());
 			navigate('/auth');
 		}
 	}, [dispatch, isAuth, navigate]);

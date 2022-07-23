@@ -8,6 +8,7 @@ const {
 	updateUser,
 	deleteUser,
 	login,
+	checkToken,
 } = require('../controllers/users.controller');
 
 // Middlewares
@@ -29,6 +30,8 @@ usersRouter.post('/login', login);
 usersRouter.use(protectSession);
 
 usersRouter.get('/', getAllUsers);
+
+usersRouter.get('/check-token', checkToken);
 
 usersRouter
 	.use('/:id', userExists)

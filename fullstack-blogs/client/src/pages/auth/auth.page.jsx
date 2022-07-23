@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 // Redux actions
-// import { checkToken } from '../../store/actions/user.actions';
+import { checkToken } from '../../store/actions/user.actions';
 
 // Components
 import Login from '../../components/auth/login/login.component';
@@ -28,7 +28,7 @@ const Auth = () => {
 
 	useEffect(() => {
 		if (isAuth) navigate('/');
-		// else dispatch(checkToken());
+		else dispatch(checkToken());
 	}, [navigate, isAuth, dispatch]);
 
 	return (
