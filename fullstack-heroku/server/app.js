@@ -53,10 +53,10 @@ if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 else app.use(morgan('combined'));
 
 // Define endpoints
-app.use('/', viewsRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/posts', postsRouter);
 app.use('/api/v1/comments', commentsRouter);
+app.use('/*', viewsRouter);
 
 // Handle incoming unknown routes to the server
 app.all('*', (req, res, next) => {
