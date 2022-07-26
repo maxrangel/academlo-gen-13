@@ -1,0 +1,22 @@
+.form-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.actions {
+	display: flex;
+	justify-content: space-around;
+}
+
+.form-item {
+	width: 400px;
+}
+
+/* Large resolution */
+@media (min-width: 992px) {
+	.form-item {
+		width: 300px;
+	}
+}

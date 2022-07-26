@@ -1,0 +1,20 @@
+@import url('antd/dist/antd.css');
+
+*,
+*::after,
+*::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: inherit;
+}
+
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	box-sizing: border-box;
+	background-color: #f8f2ec;
+}

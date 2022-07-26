@@ -1,0 +1,18 @@
+.card {
+	width: 100%;
+	/* margin: 0 auto; */
+	margin-bottom: 20px;
+}
+
+/* Large resolution */
+/* @media (min-width: 992px) {
+	.card {
+		width: 250px;
+	}
+} */
+/* 
+@media (min-width: 1200px) {
+	.card {
+		width: 300px;
+	}
+} */
