@@ -3,10 +3,15 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
+	"engines": {
+		"node": "^16.x"
+	},
 	"scripts": {
+		"install:client": "cd client && npm install",
+		"install:server": "cd server && npm install",
+		"install:app": "npm-run-all install:server install:client",
 		"start:client": "npm start --prefix client",
-		"start:server": "npm run start:dev --prefix server",
-		"start:app": "npm-run-all --parallel start:server start:client"
+		"start:server": "npm run start:dev --prefix server"
 	},
 	"keywords": [],
 	"author": "",

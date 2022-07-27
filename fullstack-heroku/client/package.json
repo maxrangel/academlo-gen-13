@@ -5,7 +5,7 @@
 	"dependencies": {
 		"@reduxjs/toolkit": "^1.8.1",
 		"@testing-library/jest-dom": "^5.16.3",
-		"@testing-library/react": "^12.1.4",
+		"@testing-library/react": "^13.0.0",
 		"@testing-library/user-event": "^13.5.0",
 		"antd": "^4.19.5",
 		"axios": "^0.26.1",
@@ -15,6 +15,7 @@
 		"react-router-dom": "^6.3.0",
 		"react-scripts": "5.0.0",
 		"redux": "^4.1.2",
+		"socket.io-client": "^4.5.1",
 		"web-vitals": "^2.1.4"
 	},
 	"scripts": {
