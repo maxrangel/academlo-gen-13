@@ -3,7 +3,7 @@ import axios from 'axios';
 import { postsActions } from '../slices/posts.slice';
 import { errorActions } from '../slices/error.slice';
 
-const API_URL = 'http://localhost:4000/api/v1/posts';
+const API_URL = `${process.env.REACT_APP_API_URL}api/v1/posts`;
 
 export const getPosts = () => {
 	return async dispatch => {

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { usersActions } from '../slices/user.slice';
 import { errorActions } from '../slices/error.slice';
 
-const API_URL = 'http://localhost:4000/api/v1/users';
+const API_URL = `${process.env.REACT_APP_API_URL}api/v1/users`;
 
 export const login = (email, password) => {
 	return async dispatch => {
